@@ -28,3 +28,5 @@ blocks:
         - name: Integration test
           commands:
             - docker-compose run addressbook npm test
+      secrets:
+        - name: dockerhub
