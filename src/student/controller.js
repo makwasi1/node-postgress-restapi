@@ -23,22 +23,23 @@ const getStudentById = (req, res) => {
 
 const createStudent = (req, res) => {
   const { name, email, age, dob } = req.body;
-  db.sequelize.query(queries.checkEmailExists, [email], (error, results) => {
-    if (results.rows.length) {
-      res.send("Email already exists");
-    }
-    //create the student
-    db.sequelize.query(
-      queries.createStudent,
-      [name, email, age, dob],
-      (error, results) => {
-        if (error) {
-          throw error;
-        }
-        res.status(201).send(`Student added with ID: ${results.rows[0].id}`);
-      }
-    );
-  });
+  // db.sequelize.query(queries.checkEmailExists, [email], (error, results) => {
+  //   if (results.rows.length) {
+  //     res.send("Email already exists");
+  //   }
+  //create the student
+  db.Students.create({
+    name: name,
+    email: email,
+    age: age,
+    dob: dob,
+  })
+    .then((person) => {
+      res.status(200).send(JSON.stringify(person));
+    })
+    .catch((err) => {
+      res.status(500).send(JSON.stringify(err));
+    });
 };
 
 const updateStudent = (req, res) => {
